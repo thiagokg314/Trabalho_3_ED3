@@ -1,5 +1,5 @@
 all:
-	gcc -o programaTrab ./src/arquivo.c ./src/auxiliar.c ./src/funcionalidades.c ./src/main.c ./src/registro.c ./src/variaveis.c
+	gcc -o programaTrab ./src/arquivo.c ./src/auxiliar.c ./src/funcionalidades.c ./src/grafo.c ./src/main.c ./src/registro.c ./src/variaveis.c
 
 run: programaTrab
 	./programaTrab
