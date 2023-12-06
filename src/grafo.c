@@ -13,7 +13,14 @@ int encontrarVertice(Grafo *grafo, const char *nomeTecnologia) {
 // Liberar a memória alocada para o grafo
 void liberarGrafo(Grafo *grafo) {
     for (int i = 0; i < grafo->numVertices; i++) {
-        free(grafo->vertices[i].arestas);
+        for (int j = 0; j < grafo->vertices[i].numArestas; j++) {
+            free(grafo->vertices[i].arestas->nomeTecnologiaDestino.string);
+            free(grafo->vertices[i].arestas->nomeTecnologiaDestino.tamanho);
+            free(grafo->vertices[i].arestas);
+        }
+        free(grafo->vertices[i].nomeTecnologia.string);
+        free(grafo->vertices[i].nomeTecnologia.tamanho);
     }
     free(grafo->vertices);
+    free(grafo);
 }
