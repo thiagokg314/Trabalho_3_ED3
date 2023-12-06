@@ -16,16 +16,16 @@ void gerarGrafo() {
 	Cabecalho *cabecalho = (Cabecalho*) malloc(sizeof(Cabecalho));
 	fread(cabecalho, sizeof(Cabecalho), 1, arquivoBIN);
 
-	Grafo *grafo = (Grafo*) malloc(sizeof(Grafo));
-	grafo->numVertices = 0;
-    grafo->vertices = NULL;
-
 	if (cabecalho->proxRRN == 0)
 	{
 		printf("Registro inexistente.\n");
 	}
 	else
 	{
+		Grafo *grafo = (Grafo*) malloc(sizeof(Grafo));
+		grafo->numVertices = 0;
+		grafo->vertices = NULL;
+
 		for (int i = 0; i < cabecalho->proxRRN; i++)
 		{
 			Registro *registro = (Registro*) malloc(sizeof(Registro));
@@ -46,6 +46,7 @@ void gerarGrafo() {
 
 					// Preenche os dados do vértice
 					vertice->nomeTecnologia.tamanho = registro->tecnologiaOrigem.tamanho;
+					vertice->nomeTecnologia.string = (char*)malloc(vertice->nomeTecnologia.tamanho);
 					strncpy(vertice->nomeTecnologia.string, registro->tecnologiaOrigem.string, vertice->nomeTecnologia.tamanho);
 					vertice->grupo = registro->grupo;
 					vertice->grauEntrada = 0;
@@ -66,6 +67,7 @@ void gerarGrafo() {
 
 					// Preenche os dados do vértice
 					vertice->nomeTecnologia.tamanho = registro->tecnologiaDestino.tamanho;
+					vertice->nomeTecnologia.string = (char*)malloc(vertice->nomeTecnologia.tamanho);
 					strncpy(vertice->nomeTecnologia.string, registro->tecnologiaDestino.string, vertice->nomeTecnologia.tamanho);
 					vertice->grupo = registro->grupo;
 					vertice->grauEntrada = 0;
@@ -94,6 +96,8 @@ void gerarGrafo() {
 
 			liberarRegistro(registro);
 		}
+
+		liberarGrafo(grafo);
 	}
 
 	cabecalho->status = CONSISTENTE;
