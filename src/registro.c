@@ -31,13 +31,13 @@ void lerRegistroBIN(FILE *arquivoBIN, Registro *registro)
 void imprimeRegistro(Registro *registro)
 {
 	imprimeString(registro->tecnologiaOrigem);
-	printf(", ");
+	printf(" ");
 	imprimeNum(registro->grupo);
-	printf(", ");
+	printf(" ");
 	imprimeNum(registro->popularidade);
-	printf(", ");
+	printf(" ");
 	imprimeString(registro->tecnologiaDestino);
-	printf(", ");
+	printf(" ");
 	imprimeNum(registro->peso);
 	printf("\n");
 }
