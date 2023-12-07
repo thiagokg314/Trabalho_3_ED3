@@ -20,10 +20,20 @@ void imprimirGrafo(Grafo *grafo) {
     }
 }
 
+// Função de comparação para o qsort
+int compararVertices(const void *a, const void *b) {
+    return strcmp(((Vertice *)a)->nomeTecnologia.string, ((Vertice *)b)->nomeTecnologia.string);
+}
+
+// Função para ordenar o grafo
 void ordenarGrafo(Grafo *grafo) {
-    for (int i = 0; i < grafo->numVertices; i++) {
-        
+    if (grafo == NULL || grafo->vertices == NULL || grafo->numVertices <= 0) {
+        // Verificação de entrada inválida
+        return;
     }
+
+    // Usando a função qsort para ordenar os vértices
+    qsort(grafo->vertices, grafo->numVertices, sizeof(Vertice), compararVertices);
 }
 
 // Função auxiliar para imprimir informações de um vértice e sua aresta

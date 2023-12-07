@@ -11,14 +11,14 @@ void lerRegistroBIN(FILE *arquivoBIN, Registro *registro)
 
 	// Lê os campos de strings variáveis e aloca memória dinamicamente.
 	fread(&registro->tecnologiaOrigem.tamanho, sizeof(int), 1, arquivoBIN);
-	registro->tecnologiaOrigem.string = malloc(registro->tecnologiaOrigem.tamanho * sizeof(char));
+	registro->tecnologiaOrigem.string = malloc(registro->tecnologiaOrigem.tamanho * sizeof(char) + 1);
 	fread(registro->tecnologiaOrigem.string, sizeof(char), registro->tecnologiaOrigem.tamanho, arquivoBIN);
-	//registro->tecnologiaOrigem.string[registro->tecnologiaOrigem.tamanho] = '\0'; // Adiciona um caractere nulo ao final.
+	registro->tecnologiaOrigem.string[registro->tecnologiaOrigem.tamanho] = '\0'; // Adiciona um caractere nulo ao final.
 
 	fread(&registro->tecnologiaDestino.tamanho, sizeof(int), 1, arquivoBIN);
-	registro->tecnologiaDestino.string = malloc(registro->tecnologiaDestino.tamanho * sizeof(char));
+	registro->tecnologiaDestino.string = malloc(registro->tecnologiaDestino.tamanho * sizeof(char) + 1);
 	fread(registro->tecnologiaDestino.string, sizeof(char), registro->tecnologiaDestino.tamanho, arquivoBIN);
-	//registro->tecnologiaDestino.string[registro->tecnologiaDestino.tamanho] = '\0'; // Adiciona um caractere nulo ao final.
+	registro->tecnologiaDestino.string[registro->tecnologiaDestino.tamanho] = '\0'; // Adiciona um caractere nulo ao final.
 
 	size_t bytesNaoUtilizados = TAM_REGISTRO - (5* sizeof(int) + registro->tecnologiaOrigem.tamanho +
 		registro->tecnologiaDestino.tamanho + sizeof(char));

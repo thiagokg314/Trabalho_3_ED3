@@ -14,6 +14,10 @@ int encontrarVertice(Grafo *grafo, char *nomeTecnologia);
 // Imprime o grafo de acordo com as especificacoes do trabalho
 void imprimirGrafo(Grafo *grafo);
 
+int compararVertices(const void *a, const void *b);
+
+void ordenarGrafo(Grafo *grafo);
+
 // Função auxiliar para imprimir informações de um vértice e sua aresta
 void imprimirVerticeAresta(Vertice *vertice, Aresta *aresta);
 

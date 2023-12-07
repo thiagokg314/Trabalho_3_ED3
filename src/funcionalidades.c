@@ -16,7 +16,7 @@ void gerarGrafo() {
 	Cabecalho *cabecalho = (Cabecalho*) malloc(sizeof(Cabecalho));
 	fread(cabecalho, sizeof(Cabecalho), 1, arquivoBIN);
 
-	printf("Numero de Tecnologias: %d\n", cabecalho->nroTecnologias);
+	//printf("Numero de Tecnologias: %d\n", cabecalho->nroTecnologias);
 
 	if (cabecalho->proxRRN == 0)
 	{
@@ -50,7 +50,7 @@ void gerarGrafo() {
 
 					// Preenche os dados do vértice
 					vertice->nomeTecnologia.tamanho = registro->tecnologiaOrigem.tamanho;
-					vertice->nomeTecnologia.string = (char*)malloc(vertice->nomeTecnologia.tamanho);
+					vertice->nomeTecnologia.string = (char*)malloc(vertice->nomeTecnologia.tamanho + 1);
 					strcpy(vertice->nomeTecnologia.string, registro->tecnologiaOrigem.string);
 					vertice->grupo = registro->grupo;
 					vertice->grauEntrada = 0;
@@ -71,7 +71,7 @@ void gerarGrafo() {
 
 					// Preenche os dados do vértice
 					vertice->nomeTecnologia.tamanho = registro->tecnologiaDestino.tamanho;
-					vertice->nomeTecnologia.string = (char*)malloc(vertice->nomeTecnologia.tamanho);
+					vertice->nomeTecnologia.string = (char*)malloc(vertice->nomeTecnologia.tamanho + 1);
 					strcpy(vertice->nomeTecnologia.string, registro->tecnologiaDestino.string);
 					vertice->grupo = registro->grupo;
 					vertice->grauEntrada = 0;
@@ -86,7 +86,7 @@ void gerarGrafo() {
 					grafo->vertices[indiceOrigem].numArestas*sizeof(Aresta));
 				Aresta *aresta = &grafo->vertices[indiceOrigem].arestas[grafo->vertices[indiceOrigem].numArestas - 1];
 				aresta->nomeTecnologiaDestino.tamanho = registro->tecnologiaDestino.tamanho;
-				aresta->nomeTecnologiaDestino.string = (char*)malloc(aresta->nomeTecnologiaDestino.tamanho);
+				aresta->nomeTecnologiaDestino.string = (char*)malloc(aresta->nomeTecnologiaDestino.tamanho + 1);
 				strcpy(aresta->nomeTecnologiaDestino.string, registro->tecnologiaDestino.string);
 				aresta->peso = registro->peso;
 
@@ -102,7 +102,8 @@ void gerarGrafo() {
 			liberarRegistro(registro);
 		}
 
-		printf("Numero de vertices: %d\n", grafo->numVertices);
+		//printf("Numero de vertices: %d\n", grafo->numVertices);
+		ordenarGrafo(grafo);
 		imprimirGrafo(grafo);
 		liberarGrafo(grafo);
 	}
