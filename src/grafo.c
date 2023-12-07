@@ -20,9 +20,25 @@ void imprimirGrafo(Grafo *grafo) {
     }
 }
 
-// Função de comparação para o qsort
+// Função de comparação para o qsort para as arestas
+int compararArestas(const void *a, const void *b) {
+    return strcmp(((Aresta *)a)->nomeTecnologiaDestino.string, ((Aresta *)b)->nomeTecnologiaDestino.string);
+}
+
+// Função de comparação para o qsort para os vértices
 int compararVertices(const void *a, const void *b) {
     return strcmp(((Vertice *)a)->nomeTecnologia.string, ((Vertice *)b)->nomeTecnologia.string);
+}
+
+// Função para ordenar as arestas de um vértice
+void ordenarArestas(Vertice *vertice) {
+    if (vertice == NULL || vertice->arestas == NULL || vertice->numArestas <= 0) {
+        // Verificação de entrada inválida
+        return;
+    }
+
+    // Usando a função qsort para ordenar as arestas
+    qsort(vertice->arestas, vertice->numArestas, sizeof(Aresta), compararArestas);
 }
 
 // Função para ordenar o grafo
@@ -34,6 +50,11 @@ void ordenarGrafo(Grafo *grafo) {
 
     // Usando a função qsort para ordenar os vértices
     qsort(grafo->vertices, grafo->numVertices, sizeof(Vertice), compararVertices);
+
+    // Iterar sobre os vértices e ordenar as arestas de cada vértice
+    for (int i = 0; i < grafo->numVertices; i++) {
+        ordenarArestas(&(grafo->vertices[i]));
+    }
 }
 
 // Função auxiliar para imprimir informações de um vértice e sua aresta
