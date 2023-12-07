@@ -39,17 +39,17 @@ void ordenarGrafo(Grafo *grafo) {
 // Função auxiliar para imprimir informações de um vértice e sua aresta
 void imprimirVerticeAresta(Vertice *vertice, Aresta *aresta) {
     imprimeString(vertice->nomeTecnologia);
-    printf(", ");
+    printf(" ");
     imprimeNum(vertice->grupo);
-    printf(", ");
+    printf(" ");
     imprimeNum(vertice->grauEntrada);
-    printf(", ");
+    printf(" ");
     imprimeNum(vertice->grauSaida);
-    printf(", ");
+    printf(" ");
     imprimeNum(vertice->grau);
-    printf(", ");
+    printf(" ");
     imprimeString(aresta->nomeTecnologiaDestino);
-    printf(", ");
+    printf(" ");
     imprimeNum(aresta->peso);
 }
 
