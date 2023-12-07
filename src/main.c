@@ -13,13 +13,14 @@ int main(int argc, char *argv[])
     switch (num) {
         case 8:
             grafo = gerarGrafo();
+            imprimirGrafo(grafo);
             liberarGrafo(grafo);
             break;
         case 9:
             gerarTransposta();
             break;
         case 10:
-            
+            listarTecnologias();
             break;
         case 11:
             

@@ -100,7 +100,6 @@ Grafo* gerarGrafo() {
 		}
 
 		ordenarGrafo(grafo);
-		imprimirGrafo(grafo);
 	}
 
 	cabecalho->status = CONSISTENTE;
@@ -126,14 +125,15 @@ void gerarTransposta() {
 
             // Troca origem e destino da aresta
 			char *tempNome = malloc(aresta->nomeTecnologiaDestino.tamanho + 1);
+			int tempTamanho = aresta->nomeTecnologiaDestino.tamanho;
 			strcpy(tempNome, aresta->nomeTecnologiaDestino.string);
 
 			free(aresta->nomeTecnologiaDestino.string);
-			aresta->nomeTecnologiaDestino.string = malloc(vertice->nomeTecnologia.tamanho + 1);
+			aresta->nomeTecnologiaDestino.string = (char*)malloc(vertice->nomeTecnologia.tamanho + 1);
 			strcpy(aresta->nomeTecnologiaDestino.string, vertice->nomeTecnologia.string);
 
 			free(vertice->nomeTecnologia.string);
-			vertice->nomeTecnologia.string = malloc(aresta->nomeTecnologiaDestino.tamanho + 1);
+			vertice->nomeTecnologia.string = (char*)malloc(tempTamanho + 1);
 			strcpy(vertice->nomeTecnologia.string, tempNome);
 
             // Atualiza os graus do vértice de origem (agora destino)
@@ -156,4 +156,38 @@ void gerarTransposta() {
     imprimirGrafo(grafo);
 
     liberarGrafo(grafo);
+}
+
+void listarTecnologias() {
+
+	Grafo *grafo = gerarGrafo();
+
+	int n;
+	scanf("%d", &n);
+
+	char *nomes[n];
+
+	for (int i = 0; i < n; i++) {
+		nomes[i] = (char*) malloc(50* sizeof(char));
+		scan_quote_string(nomes[i]);
+	}
+
+	for(int k = 0; k < n; k++) {
+		int encontrouDestino = 0;
+		printf("%s:", nomes[k]);
+		for(int i = 0; i < grafo->numVertices; i++) {
+			for(int j = 0; j < grafo->vertices[i].numArestas; j++) {
+				if(strcmp(nomes[k], grafo->vertices[i].arestas[j].nomeTecnologiaDestino.string) == 0) {
+					if(encontrouDestino) {
+						printf(",");
+					}
+					encontrouDestino = 1;
+					printf(" %s", grafo->vertices[i].nomeTecnologia.string);
+				}
+			}
+		}
+		printf("\n\n");
+	}
+
+	liberarGrafo(grafo);
 }

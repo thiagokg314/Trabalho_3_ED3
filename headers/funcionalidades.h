@@ -6,10 +6,13 @@
 #include "../headers/variaveis.h"
 #include "../headers/arquivo.h"
 #include "../headers/registro.h"
+#include "../headers/funcoesFornecidas.h"
 
 // Implementacao da funcionalidade [8]
 Grafo* gerarGrafo();
 
 void gerarTransposta();
+
+void listarTecnologias();
 
 #endif
