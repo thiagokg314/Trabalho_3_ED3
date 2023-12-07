@@ -8,6 +8,8 @@
 #include "../headers/registro.h"
 
 // Implementacao da funcionalidade [8]
-void gerarGrafo();
+Grafo* gerarGrafo();
+
+void gerarTransposta();
 
 #endif

@@ -6,7 +6,7 @@ void criarCabecalho(FILE *arquivoBIN, Cabecalho *cabecalho)
 	fwrite(cabecalho, sizeof(Cabecalho), 1, arquivoBIN);
 }
 
-void gerarGrafo() {
+Grafo* gerarGrafo() {
 
     char nomeArquivoBIN[50];
 	scanf("%s", nomeArquivoBIN);
@@ -16,7 +16,7 @@ void gerarGrafo() {
 	Cabecalho *cabecalho = (Cabecalho*) malloc(sizeof(Cabecalho));
 	fread(cabecalho, sizeof(Cabecalho), 1, arquivoBIN);
 
-	//printf("Numero de Tecnologias: %d\n", cabecalho->nroTecnologias);
+	Grafo *grafo = (Grafo*)malloc(sizeof(Grafo));
 
 	if (cabecalho->proxRRN == 0)
 	{
@@ -24,7 +24,6 @@ void gerarGrafo() {
 	}
 	else
 	{
-		Grafo *grafo = (Grafo*)malloc(sizeof(Grafo));
 		grafo->numVertices = 0;
 		grafo->vertices = NULL;
 
@@ -35,13 +34,11 @@ void gerarGrafo() {
 
 			if (registro->removido == '0')
 			{
-				//imprimeRegistro(registro);
 				// Verifica se o vértice de origem já existe no grafo
 				int indiceOrigem = encontrarVertice(grafo, registro->tecnologiaOrigem.string);
 
 				// Se não existe, cria um novo vértice
 				if(indiceOrigem == -1) {
-					//printf("CRIOU VERTICE\n");
 					grafo->numVertices++;
 					grafo->vertices = realloc(grafo->vertices, grafo->numVertices*sizeof(Vertice));
 					Vertice *vertice = &grafo->vertices[grafo->numVertices-1];
@@ -102,10 +99,8 @@ void gerarGrafo() {
 			liberarRegistro(registro);
 		}
 
-		//printf("Numero de vertices: %d\n", grafo->numVertices);
 		ordenarGrafo(grafo);
 		imprimirGrafo(grafo);
-		liberarGrafo(grafo);
 	}
 
 	cabecalho->status = CONSISTENTE;
@@ -113,4 +108,52 @@ void gerarGrafo() {
 
 	free(cabecalho);
 	fclose(arquivoBIN);
+
+	return grafo;
+}
+
+void gerarTransposta() {
+
+    Grafo *grafo = gerarGrafo();
+
+    // Para cada vértice no grafo
+    for (int i = 0; i < grafo->numVertices; i++) {
+        Vertice *vertice = &grafo->vertices[i];
+
+        // Para cada aresta do vértice
+        for (int j = 0; j < vertice->numArestas; j++) {
+    		Aresta *aresta = &vertice->arestas[j];
+
+            // Troca origem e destino da aresta
+			char *tempNome = malloc(aresta->nomeTecnologiaDestino.tamanho + 1);
+			strcpy(tempNome, aresta->nomeTecnologiaDestino.string);
+
+			free(aresta->nomeTecnologiaDestino.string);
+			aresta->nomeTecnologiaDestino.string = malloc(vertice->nomeTecnologia.tamanho + 1);
+			strcpy(aresta->nomeTecnologiaDestino.string, vertice->nomeTecnologia.string);
+
+			free(vertice->nomeTecnologia.string);
+			vertice->nomeTecnologia.string = malloc(aresta->nomeTecnologiaDestino.tamanho + 1);
+			strcpy(vertice->nomeTecnologia.string, tempNome);
+
+            // Atualiza os graus do vértice de origem (agora destino)
+            vertice->grauEntrada++;
+            vertice->grau--;
+
+            // Encontra o vértice de destino no grafo
+            int indiceDestino = encontrarVertice(grafo, tempNome);
+
+            // Atualiza os graus do vértice de destino (agora origem)
+            grafo->vertices[indiceDestino].grauSaida++;
+            grafo->vertices[indiceDestino].grau--;
+
+            // Troca o nome da tecnologia no destino
+            free(tempNome);
+        }
+    }
+
+	ordenarGrafo(grafo);
+    imprimirGrafo(grafo);
+
+    liberarGrafo(grafo);
 }

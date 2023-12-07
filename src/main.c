@@ -7,13 +7,16 @@ int main(int argc, char *argv[])
     int num;
     scanf("%d", &num);
 
+    Grafo *grafo;
+
     // Utiliza uma estrutura de seleção (switch) para executar a função apropriada com base no valor lido.
     switch (num) {
         case 8:
-            gerarGrafo();
+            grafo = gerarGrafo();
+            liberarGrafo(grafo);
             break;
         case 9:
-            
+            gerarTransposta();
             break;
         case 10:
             
