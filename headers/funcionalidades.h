@@ -3,7 +3,6 @@
 
 #include "../headers/grafo.h"
 #include "../headers/structsGrafo.h"
-#include "../headers/structs.h"
 #include "../headers/variaveis.h"
 #include "../headers/arquivo.h"
 #include "../headers/registro.h"

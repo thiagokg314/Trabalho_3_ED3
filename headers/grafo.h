@@ -2,13 +2,20 @@
 #define GRAFO_H
 
 #include "../headers/structsGrafo.h"
+#include "../headers/auxiliar.h"
 
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 
 // Função auxiliar para encontrar um vértice pelo nome no grafo
-int encontrarVertice(Grafo *grafo, const char *nomeTecnologia);
+int encontrarVertice(Grafo *grafo, char *nomeTecnologia);
+
+// Imprime o grafo de acordo com as especificacoes do trabalho
+void imprimirGrafo(Grafo *grafo);
+
+// Função auxiliar para imprimir informações de um vértice e sua aresta
+void imprimirVerticeAresta(Vertice *vertice, Aresta *aresta);
 
 // Liberar a memória alocada para o grafo
 void liberarGrafo(Grafo *grafo);

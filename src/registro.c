@@ -13,12 +13,18 @@ void lerRegistroBIN(FILE *arquivoBIN, Registro *registro)
 	fread(&registro->tecnologiaOrigem.tamanho, sizeof(int), 1, arquivoBIN);
 	registro->tecnologiaOrigem.string = malloc(registro->tecnologiaOrigem.tamanho * sizeof(char));
 	fread(registro->tecnologiaOrigem.string, sizeof(char), registro->tecnologiaOrigem.tamanho, arquivoBIN);
-	registro->tecnologiaOrigem.string[registro->tecnologiaOrigem.tamanho] = '\0'; // Adiciona um caractere nulo ao final.
+	//registro->tecnologiaOrigem.string[registro->tecnologiaOrigem.tamanho] = '\0'; // Adiciona um caractere nulo ao final.
 
 	fread(&registro->tecnologiaDestino.tamanho, sizeof(int), 1, arquivoBIN);
 	registro->tecnologiaDestino.string = malloc(registro->tecnologiaDestino.tamanho * sizeof(char));
 	fread(registro->tecnologiaDestino.string, sizeof(char), registro->tecnologiaDestino.tamanho, arquivoBIN);
-	registro->tecnologiaDestino.string[registro->tecnologiaDestino.tamanho] = '\0'; // Adiciona um caractere nulo ao final.
+	//registro->tecnologiaDestino.string[registro->tecnologiaDestino.tamanho] = '\0'; // Adiciona um caractere nulo ao final.
+
+	size_t bytesNaoUtilizados = TAM_REGISTRO - (5* sizeof(int) + registro->tecnologiaOrigem.tamanho +
+		registro->tecnologiaDestino.tamanho + sizeof(char));
+	char *lixo = malloc(bytesNaoUtilizados);
+	fread(lixo, bytesNaoUtilizados, 1, arquivoBIN);
+	free(lixo);
 }
 
 // Função para imprimir um registro, formatando a saída.

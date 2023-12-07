@@ -1,5 +1,7 @@
 #include<stdio.h>
 
+#include "../headers/funcionalidades.h"
+
 int main(int argc, char *argv[])
 {
     int num;
@@ -8,7 +10,7 @@ int main(int argc, char *argv[])
     // Utiliza uma estrutura de seleção (switch) para executar a função apropriada com base no valor lido.
     switch (num) {
         case 8:
-            
+            gerarGrafo();
             break;
         case 9:
             

@@ -2,6 +2,7 @@
 #define REGISTRO_H
 
 #include "../headers/auxiliar.h"
+#include "../headers/variaveis.h"
 
 // Função para ler um registro de um arquivo BIN e preencher uma estrutura de Registro.
 void lerRegistroBIN(FILE *arquivoBIN, Registro *registro);

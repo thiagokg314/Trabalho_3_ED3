@@ -1,18 +1,11 @@
 #ifndef STRUCTSGRAFO_H
 #define STRUCTSGRAFO_H
 
-// Estrutura para armazenar as strings e seus tamanhos
-typedef struct
-{
-	int tamanho;
-	char *string;
-}
-
-StringNome;
+#include "../headers/structs.h"
 
 // Estrutura para representar uma aresta ponderada
 typedef struct {
-    StringNome nomeTecnologiaDestino;
+    StringVariavel nomeTecnologiaDestino;
     int peso;
 } 
 
@@ -20,7 +13,7 @@ Aresta;
 
 // Estrutura para representar um vértice do grafo
 typedef struct {
-    StringNome nomeTecnologia;
+    StringVariavel nomeTecnologia;
     int grupo;
     int grauEntrada;
     int grauSaida;
