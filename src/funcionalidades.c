@@ -124,17 +124,13 @@ void gerarTransposta() {
     		Aresta *aresta = &vertice->arestas[j];
 
             // Troca origem e destino da aresta
-			char *tempNome = malloc(aresta->nomeTecnologiaDestino.tamanho + 1);
-			int tempTamanho = aresta->nomeTecnologiaDestino.tamanho;
-			strcpy(tempNome, aresta->nomeTecnologiaDestino.string);
+			char *tempNome = strdup(aresta->nomeTecnologiaDestino.string);
 
-			free(aresta->nomeTecnologiaDestino.string);
-			aresta->nomeTecnologiaDestino.string = (char*)malloc(vertice->nomeTecnologia.tamanho + 1);
-			strcpy(aresta->nomeTecnologiaDestino.string, vertice->nomeTecnologia.string);
+            free(aresta->nomeTecnologiaDestino.string);
+            aresta->nomeTecnologiaDestino.string = strdup(vertice->nomeTecnologia.string);
 
-			free(vertice->nomeTecnologia.string);
-			vertice->nomeTecnologia.string = (char*)malloc(tempTamanho + 1);
-			strcpy(vertice->nomeTecnologia.string, tempNome);
+            free(vertice->nomeTecnologia.string);
+            vertice->nomeTecnologia.string = tempNome;
 
             // Atualiza os graus do vértice de origem (agora destino)
             vertice->grauEntrada++;
@@ -148,7 +144,6 @@ void gerarTransposta() {
             grafo->vertices[indiceDestino].grau--;
 
             // Troca o nome da tecnologia no destino
-            free(tempNome);
         }
     }
 
