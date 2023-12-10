@@ -163,10 +163,10 @@ void kosaraju() {
     }
 
 	if(numComponentes == grafo->numVertices) {
-		printf("Sim, o grafo e fortemente conexo e possui %d componentes.\n", numComponentes);
+		printf("Sim, o grafo é fortemente conexo e possui %d componentes.\n", numComponentes);
 	}
 	else {
-		printf("Nao, o grafo nao e fortemente conexo e possui %d componentes.\n", numComponentes);
+		printf("Não, o grafo não é fortemente conexo e possui %d componentes.\n", numComponentes);
 	}
 
     // Liberar memória
@@ -180,14 +180,14 @@ void kosaraju() {
 	return;
 }
 
-// Função auxiliar para encontrar o vértice com a menor distância
-int encontrarVerticeMenorDistancia(int dist[], bool visitado[], int numVertices) {
+// Função auxiliar para encontrar o vértice com a menor distanciaância
+int encontrarVerticeMenordistanciaancia(int distancia[], bool visitado[], int numVertices) {
 
 	int min = INT_MAX, min_index;
 
     for (int v = 0; v < numVertices; v++) {
-        if (!visitado[v] && dist[v] < min) {
-            min = dist[v];
+        if (!visitado[v] && distancia[v] < min) {
+            min = distancia[v];
             min_index = v;
         }
     }
@@ -236,38 +236,38 @@ void dijkstra() {
             }
         }
 
-		int dist[grafo->numVertices];
+		int distancia[grafo->numVertices];
         bool visitado[grafo->numVertices];
 
 		// Inicialização
         for (int i = 0; i < grafo->numVertices; i++) {
-            dist[i] = INT_MAX;
+            distancia[i] = INT_MAX;
             visitado[i] = false;
         }
 
-		dist[origem] = 0;
+		distancia[origem] = 0;
 
 		for (int count = 0; count < grafo->numVertices - 1; count++) {
 
-            int u = encontrarVerticeMenorDistancia(dist, visitado, grafo->numVertices);
+            int u = encontrarVerticeMenordistanciaancia(distancia, visitado, grafo->numVertices);
 
             visitado[u] = true;
 
-            // Atualizar distâncias dos vértices adjacentes do vértice escolhido
+            // Atualizar distanciaâncias dos vértices adjacentes do vértice escolhido
             for (int v = 0; v < grafo->numVertices; v++) {
                 for (int i = 0; i < grafo->vertices[u].numArestas; i++) {
 
                     Aresta aresta = grafo->vertices[u].arestas[i];
 
                     if (strcmp(grafo->vertices[v].nomeTecnologia.string, aresta.nomeTecnologiaDestino.string) == 0 &&
-                        !visitado[v] && dist[u] != INT_MAX && dist[u] + aresta.peso < dist[v]) {
-                        dist[v] = dist[u] + aresta.peso;
+                        !visitado[v] && distancia[u] != INT_MAX && distancia[u] + aresta.peso < distancia[v]) {
+                        distancia[v] = distancia[u] + aresta.peso;
                     }
                 }
             }
         }
-		if(dist[destino] != INT_MAX)
-			printf("%s %s: %d\n", nomes[i][0], nomes[i][1], dist[destino]);
+		if(distancia[destino] != INT_MAX)
+			printf("%s %s: %d\n", nomes[i][0], nomes[i][1], distancia[destino]);
 		else
 			printf("%s %s: CAMINHO INEXISTENTE.\n", nomes[i][0], nomes[i][1]);
 	}
