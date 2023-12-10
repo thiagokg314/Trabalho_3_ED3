@@ -266,7 +266,10 @@ void dijkstra() {
                 }
             }
         }
-		printf("%s: %d\n", nomes[i][0], dist[destino]);
+		if(dist[destino] != INT_MAX)
+			printf("%s %s: %d\n", nomes[i][0], nomes[i][1], dist[destino]);
+		else
+			printf("%s %s: CAMINHO INEXISTENTE.\n", nomes[i][0], nomes[i][1]);
 	}
 
 	liberarGrafo(grafo);
