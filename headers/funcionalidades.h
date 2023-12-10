@@ -16,4 +16,6 @@ void listarTecnologias();
 
 void kosaraju();
 
+void dijkstra();
+
 #endif

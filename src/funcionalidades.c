@@ -1,4 +1,6 @@
 #include "../headers/funcionalidades.h"
+#include <limits.h>
+#include <stdbool.h>
 
 void criarCabecalho(FILE *arquivoBIN, Cabecalho *cabecalho)
 {
@@ -173,6 +175,100 @@ void kosaraju() {
 	free(componentes);
 
     liberarGrafo(grafoInvertido);
+	liberarGrafo(grafo);
+
+	return;
+}
+
+// Função auxiliar para encontrar o vértice com a menor distância
+int encontrarVerticeMenorDistancia(int dist[], bool visitado[], int numVertices) {
+
+	int min = INT_MAX, min_index;
+
+    for (int v = 0; v < numVertices; v++) {
+        if (!visitado[v] && dist[v] < min) {
+            min = dist[v];
+            min_index = v;
+        }
+    }
+
+    return min_index;
+}
+
+// Função principal que implementa o algoritmo de Dijkstra
+void dijkstra() {
+
+	Grafo* grafo = gerarGrafo();
+
+	int n;
+	scanf("%d", &n);
+
+	char *nomes[n][2];
+
+	for (int i = 0; i < n; i++) {
+		nomes[i][0] = (char*) malloc(50* sizeof(char));
+		nomes[i][1] = (char*) malloc(50* sizeof(char));
+		scan_quote_string(nomes[i][0]);
+		scan_quote_string(nomes[i][1]);
+	}
+
+	for(int i = 0; i < n; i++) {
+
+		char *nomeOrigem = nomes[i][0];
+        char *nomeDestino = nomes[i][1];
+
+		int origem = -1;
+		int destino = -1;
+
+		// Encontrar os índices dos vértices correspondentes aos nomes
+        for (int j = 0; j < grafo->numVertices; j++) {
+
+            if (strcmp(grafo->vertices[j].nomeTecnologia.string, nomeOrigem) == 0) {
+                origem = j;
+            }
+
+            if (strcmp(grafo->vertices[j].nomeTecnologia.string, nomeDestino) == 0) {
+                destino = j;
+            }
+
+            if (origem != -1 && destino != -1) {
+                break; // Sair do loop se ambos os vértices foram encontrados
+            }
+        }
+
+		int dist[grafo->numVertices];
+        bool visitado[grafo->numVertices];
+
+		// Inicialização
+        for (int i = 0; i < grafo->numVertices; i++) {
+            dist[i] = INT_MAX;
+            visitado[i] = false;
+        }
+
+		dist[origem] = 0;
+
+		for (int count = 0; count < grafo->numVertices - 1; count++) {
+
+            int u = encontrarVerticeMenorDistancia(dist, visitado, grafo->numVertices);
+
+            visitado[u] = true;
+
+            // Atualizar distâncias dos vértices adjacentes do vértice escolhido
+            for (int v = 0; v < grafo->numVertices; v++) {
+                for (int i = 0; i < grafo->vertices[u].numArestas; i++) {
+
+                    Aresta aresta = grafo->vertices[u].arestas[i];
+
+                    if (strcmp(grafo->vertices[v].nomeTecnologia.string, aresta.nomeTecnologiaDestino.string) == 0 &&
+                        !visitado[v] && dist[u] != INT_MAX && dist[u] + aresta.peso < dist[v]) {
+                        dist[v] = dist[u] + aresta.peso;
+                    }
+                }
+            }
+        }
+		printf("%s: %d\n", nomes[i][0], dist[destino]);
+	}
+
 	liberarGrafo(grafo);
 
 	return;

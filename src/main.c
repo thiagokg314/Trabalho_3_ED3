@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
             kosaraju();
             break;
         case 12:
-            
+            dijkstra();
             break;
     }
 
