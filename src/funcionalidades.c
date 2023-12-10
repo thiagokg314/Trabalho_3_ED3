@@ -82,15 +82,15 @@ Grafo* gerarGrafo() {
 			Registro *registro = (Registro*) malloc(sizeof(Registro));
 			lerRegistroBIN(arquivoBIN, registro);
 
-			if (registro->removido == '0' && registro->peso != -1 
-				&& registro->tecnologiaOrigem.tamanho != 0 && registro->tecnologiaDestino.tamanho != 0) {
+			if (registro->removido == '0') {
 				// Verifica se o vértice de origem já existe no grafo
 				int indiceOrigem = inserirVertice(grafo, registro->tecnologiaOrigem, registro->grupo);
 				
 				// Verifica se o vértice de destino já existe no grafo
 				int indiceDestino = inserirVertice(grafo, registro->tecnologiaDestino, -2);
 
-				inserirAresta(grafo, registro->tecnologiaDestino, registro->peso, indiceOrigem, indiceDestino);
+				if(registro->peso != -1 && registro->tecnologiaOrigem.tamanho != 0 && registro->tecnologiaDestino.tamanho != 0)
+					inserirAresta(grafo, registro->tecnologiaDestino, registro->peso, indiceOrigem, indiceDestino);
 			}
 
 			liberarRegistro(registro);
