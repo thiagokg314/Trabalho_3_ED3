@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
             liberarGrafo(grafo);
             break;
         case 9:
-            grafo = gerarTransposta();
+            grafo = gerarTransposta(gerarGrafo());
             imprimirGrafo(grafo);
             liberarGrafo(grafo);
             break;
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
             listarTecnologias();
             break;
         case 11:
-            
+            kosaraju();
             break;
         case 12:
             

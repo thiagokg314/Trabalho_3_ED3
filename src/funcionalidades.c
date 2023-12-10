@@ -58,9 +58,7 @@ Grafo* gerarGrafo() {
 	return grafo;
 }
 
-Grafo* gerarTransposta() {
-
-    Grafo *grafo = gerarGrafo();
+Grafo* gerarTransposta(Grafo* grafo) {
 
 	Grafo* grafoInvertido = (Grafo*)malloc(sizeof(Grafo));
     grafoInvertido->numVertices = 0;
@@ -82,8 +80,6 @@ Grafo* gerarTransposta() {
                           grafo->vertices[i].arestas[j].peso, indiceOrigem, indiceDestino);
 		}
     }
-
-	liberarGrafo(grafo);
 
 	ordenarGrafo(grafoInvertido);
 
@@ -122,4 +118,62 @@ void listarTecnologias() {
 	}
 
 	liberarGrafo(grafo);
+
+	return;
+}
+
+void kosaraju() {
+
+	Grafo *grafo = gerarGrafo();
+
+    int* visitados = (int*)calloc(grafo->numVertices, sizeof(int));
+    int* pilha = (int*)malloc(grafo->numVertices * sizeof(int));
+    int index = 0;
+
+    // Primeira passagem: preenche a pilha com a ordem de finalização dos vértices
+    for (int i = 0; i < grafo->numVertices; ++i) {
+        if (!visitados[i]) {
+            DFS(grafo, i, visitados, pilha, &index);
+        }
+    }
+
+	Grafo *grafoInvertido = gerarTransposta(grafo);
+
+	memset(visitados, 0, grafo->numVertices * sizeof(int));
+
+	// Segunda passagem: identifica os componentes fortemente conexos
+    int** componentes = NULL;
+    int numComponentes = 0;
+
+    for (int i = grafo->numVertices - 1; i >= 0; --i) {
+        int v = pilha[i];
+        if (!visitados[v]) {
+            componentes = realloc(componentes, (numComponentes + 1) * sizeof(int*));
+            componentes[numComponentes] = NULL;
+            DFSInvertido(grafoInvertido, v, visitados, numComponentes, componentes);
+            numComponentes++;
+        }
+    }
+
+	// Processa os componentes fortemente conexos conforme necessário
+    for (int i = 0; i < numComponentes; ++i) {
+        free(componentes[i]);
+    }
+
+	if(numComponentes == grafo->numVertices) {
+		printf("Sim, o grafo e fortemente conexo e possui %d componentes.\n", numComponentes);
+	}
+	else {
+		printf("Nao, o grafo nao e fortemente conexo e possui %d componentes.\n", numComponentes);
+	}
+
+    // Liberar memória
+    free(visitados);
+    free(pilha);
+	free(componentes);
+
+    liberarGrafo(grafoInvertido);
+	liberarGrafo(grafo);
+
+	return;
 }
