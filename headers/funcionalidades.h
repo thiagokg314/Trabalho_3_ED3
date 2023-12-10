@@ -11,7 +11,7 @@
 // Implementacao da funcionalidade [8]
 Grafo* gerarGrafo();
 
-void gerarTransposta();
+Grafo* gerarTransposta();
 
 void listarTecnologias();
 

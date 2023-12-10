@@ -34,14 +34,7 @@ char *retornaString(FILE *arquivoCSV) {
 // Função para imprimir um número inteiro ou "NULO" se for -1.
 void imprimeNum(int inteiro)
 {
-	if (inteiro == -1)
-	{
-		printf("NULO");
-	}
-	else
-	{
-		printf("%d", inteiro);
-	}
+	printf("%d", inteiro);
 }
 
 // Função para imprimir uma string variável ou "NULO" se for vazia.

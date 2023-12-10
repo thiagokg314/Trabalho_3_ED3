@@ -6,6 +6,56 @@ void criarCabecalho(FILE *arquivoBIN, Cabecalho *cabecalho)
 	fwrite(cabecalho, sizeof(Cabecalho), 1, arquivoBIN);
 }
 
+int inserirVertice(Grafo* grafo, StringVariavel string, int grupo) {
+
+	int indice = encontrarVertice(grafo, string.string);
+
+	if(indice == -1) {
+		grafo->numVertices++;
+		grafo->vertices = realloc(grafo->vertices, grafo->numVertices*sizeof(Vertice));
+		Vertice *vertice = &grafo->vertices[grafo->numVertices-1];
+		vertice->numArestas = 0;
+		vertice->arestas = NULL;
+
+		// Preenche os dados do vértice
+		vertice->nomeTecnologia.tamanho = string.tamanho;
+		vertice->nomeTecnologia.string = (char*)malloc(vertice->nomeTecnologia.tamanho + 1);
+		strcpy(vertice->nomeTecnologia.string, string.string);
+		vertice->grupo = grupo;
+		vertice->grauEntrada = 0;
+		vertice->grauSaida = 0;
+		vertice->grau = 0;
+		
+		indice = grafo->numVertices - 1;
+	}
+
+	else if(grafo->vertices[indice].grupo == -2) {
+		grafo->vertices[indice].grupo = grupo;
+	}
+
+	return indice;
+}
+
+void inserirAresta(Grafo* grafo, StringVariavel string, int peso, int indiceOrigem, int indiceDestino) {
+
+	grafo->vertices[indiceOrigem].numArestas++;
+	grafo->vertices[indiceOrigem].arestas =realloc(grafo->vertices[indiceOrigem].arestas,
+		grafo->vertices[indiceOrigem].numArestas*sizeof(Aresta));
+	Aresta *aresta = &grafo->vertices[indiceOrigem].arestas[grafo->vertices[indiceOrigem].numArestas - 1];
+	aresta->nomeTecnologiaDestino.tamanho = string.tamanho;
+	aresta->nomeTecnologiaDestino.string = (char*)malloc(aresta->nomeTecnologiaDestino.tamanho + 1);
+	strcpy(aresta->nomeTecnologiaDestino.string, string.string);
+	aresta->peso = peso;
+
+	// Atualiza os graus do vértice de origem
+	grafo->vertices[indiceOrigem].grau++;
+	grafo->vertices[indiceOrigem].grauSaida++;
+
+	// Atualiza os graus do vértice de destino
+	grafo->vertices[indiceDestino].grau++;
+	grafo->vertices[indiceDestino].grauEntrada++;
+}
+
 Grafo* gerarGrafo() {
 
     char nomeArquivoBIN[50];
@@ -32,68 +82,15 @@ Grafo* gerarGrafo() {
 			Registro *registro = (Registro*) malloc(sizeof(Registro));
 			lerRegistroBIN(arquivoBIN, registro);
 
-			if (registro->removido == '0')
-			{
+			if (registro->removido == '0' && registro->peso != -1 
+				&& registro->tecnologiaOrigem.tamanho != 0 && registro->tecnologiaDestino.tamanho != 0) {
 				// Verifica se o vértice de origem já existe no grafo
-				int indiceOrigem = encontrarVertice(grafo, registro->tecnologiaOrigem.string);
-
-				// Se não existe, cria um novo vértice
-				if(indiceOrigem == -1) {
-					grafo->numVertices++;
-					grafo->vertices = realloc(grafo->vertices, grafo->numVertices*sizeof(Vertice));
-					Vertice *vertice = &grafo->vertices[grafo->numVertices-1];
-					vertice->numArestas = 0;
-					vertice->arestas = NULL;
-
-					// Preenche os dados do vértice
-					vertice->nomeTecnologia.tamanho = registro->tecnologiaOrigem.tamanho;
-					vertice->nomeTecnologia.string = (char*)malloc(vertice->nomeTecnologia.tamanho + 1);
-					strcpy(vertice->nomeTecnologia.string, registro->tecnologiaOrigem.string);
-					vertice->grupo = registro->grupo;
-					vertice->grauEntrada = 0;
-					vertice->grauSaida = 0;
-					vertice->grau = 0;
-					
-					indiceOrigem = grafo->numVertices - 1;
-				}
+				int indiceOrigem = inserirVertice(grafo, registro->tecnologiaOrigem, registro->grupo);
 				
-				int indiceDestino = encontrarVertice(grafo, registro->tecnologiaDestino.string);
+				// Verifica se o vértice de destino já existe no grafo
+				int indiceDestino = inserirVertice(grafo, registro->tecnologiaDestino, -2);
 
-				if(indiceDestino == -1) {
-					grafo->numVertices++;
-					grafo->vertices = realloc(grafo->vertices, grafo->numVertices*sizeof(Vertice));
-					Vertice *vertice = &grafo->vertices[grafo->numVertices-1];
-					vertice->numArestas = 0;
-					vertice->arestas = NULL;
-
-					// Preenche os dados do vértice
-					vertice->nomeTecnologia.tamanho = registro->tecnologiaDestino.tamanho;
-					vertice->nomeTecnologia.string = (char*)malloc(vertice->nomeTecnologia.tamanho + 1);
-					strcpy(vertice->nomeTecnologia.string, registro->tecnologiaDestino.string);
-					vertice->grupo = registro->grupo;
-					vertice->grauEntrada = 0;
-					vertice->grauSaida = 0;
-					vertice->grau = 0;
-
-					indiceDestino = grafo->numVertices - 1;
-				}
-
-				grafo->vertices[indiceOrigem].numArestas++;
-				grafo->vertices[indiceOrigem].arestas =realloc(grafo->vertices[indiceOrigem].arestas,
-					grafo->vertices[indiceOrigem].numArestas*sizeof(Aresta));
-				Aresta *aresta = &grafo->vertices[indiceOrigem].arestas[grafo->vertices[indiceOrigem].numArestas - 1];
-				aresta->nomeTecnologiaDestino.tamanho = registro->tecnologiaDestino.tamanho;
-				aresta->nomeTecnologiaDestino.string = (char*)malloc(aresta->nomeTecnologiaDestino.tamanho + 1);
-				strcpy(aresta->nomeTecnologiaDestino.string, registro->tecnologiaDestino.string);
-				aresta->peso = registro->peso;
-
-				// Atualiza os graus do vértice de origem
-				grafo->vertices[indiceOrigem].grau++;
-				grafo->vertices[indiceOrigem].grauSaida++;
-
-				// Atualiza os graus do vértice de destino
-				grafo->vertices[indiceDestino].grau++;
-				grafo->vertices[indiceDestino].grauEntrada++;
+				inserirAresta(grafo, registro->tecnologiaDestino, registro->peso, indiceOrigem, indiceDestino);
 			}
 
 			liberarRegistro(registro);
@@ -111,46 +108,36 @@ Grafo* gerarGrafo() {
 	return grafo;
 }
 
-void gerarTransposta() {
+Grafo* gerarTransposta() {
 
     Grafo *grafo = gerarGrafo();
 
+	Grafo* grafoInvertido = (Grafo*)malloc(sizeof(Grafo));
+    grafoInvertido->numVertices = 0;
+    grafoInvertido->vertices = NULL;
+
+	for (int i = 0; i < grafo->numVertices; i++) {
+		inserirVertice(grafoInvertido, grafo->vertices[i].nomeTecnologia, grafo->vertices[i].grupo);
+	}
+
     // Para cada vértice no grafo
     for (int i = 0; i < grafo->numVertices; i++) {
-        Vertice *vertice = &grafo->vertices[i];
+		for(int j = 0; j < grafo->vertices[i].numArestas; j++) {
 
-        // Para cada aresta do vértice
-        for (int j = 0; j < vertice->numArestas; j++) {
-    		Aresta *aresta = &vertice->arestas[j];
+			int indiceDestino = encontrarVertice(grafoInvertido, grafo->vertices[i].nomeTecnologia.string);
 
-            // Troca origem e destino da aresta
-			char *tempNome = strdup(aresta->nomeTecnologiaDestino.string);
+            int indiceOrigem = encontrarVertice(grafoInvertido, grafo->vertices[i].arestas[j].nomeTecnologiaDestino.string);
 
-            free(aresta->nomeTecnologiaDestino.string);
-            aresta->nomeTecnologiaDestino.string = strdup(vertice->nomeTecnologia.string);
-
-            free(vertice->nomeTecnologia.string);
-            vertice->nomeTecnologia.string = tempNome;
-
-            // Atualiza os graus do vértice de origem (agora destino)
-            vertice->grauEntrada++;
-            vertice->grau--;
-
-            // Encontra o vértice de destino no grafo
-            int indiceDestino = encontrarVertice(grafo, tempNome);
-
-            // Atualiza os graus do vértice de destino (agora origem)
-            grafo->vertices[indiceDestino].grauSaida++;
-            grafo->vertices[indiceDestino].grau--;
-
-            // Troca o nome da tecnologia no destino
-        }
+            inserirAresta(grafoInvertido, grafo->vertices[i].nomeTecnologia, 
+                          grafo->vertices[i].arestas[j].peso, indiceOrigem, indiceDestino);
+		}
     }
 
-	ordenarGrafo(grafo);
-    imprimirGrafo(grafo);
+	liberarGrafo(grafo);
 
-    liberarGrafo(grafo);
+	ordenarGrafo(grafoInvertido);
+
+    return grafoInvertido;
 }
 
 void listarTecnologias() {
